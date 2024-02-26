@@ -1,0 +1,94 @@
+<?php
+$con = mysqli_connect("localhost","root","","hometogo") or die("not connect");
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forget Password </title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="s.css">
+</head>
+<body> 
+    <section class="wrapper">
+		<div class="container d-flex align-items-center" style="height: 100vh;">
+			<div class="col-sm-8 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 text-center">
+				<!--<div class="logo">
+					<img src="images/logo.png" class="img-fluid" alt="logo">
+				</div>-->
+				<form class="rounded bg-white shadow p-5" method="POST">
+					<h3 class="text-dark fw-bolder fs-4 mb-2">Forgot Password ?</h3>
+
+					<div class="fw-normal text-muted mb-4">
+						Enter the details to reset your password.
+					</div>  
+
+					<div class="form-floating mb-3">
+						<input type="text" name="unm" class="form-control" id="floatingInput">
+						<label for="floatingInput">UserName</label>
+					</div>  
+
+
+					<div class="form-floating mb-3">
+						<input type="email" name="email" class="form-control" id="floatingInput">
+						<label for="floatingInput">Email address</label>
+					</div>  
+
+
+					<label for="floatingInput"><b>Enter New Password</b></label><br>
+					<div class="form-floating mb-3">
+						<input type="password" name="pwd" class="form-control" id="password">
+						<label for="floatingInput">Password</label>
+					</div>  
+					<div class="form-floating mb-3">
+						<input type="password" name="pwdc" class="form-control" id="confirm_password">
+						<label for="floatingInput">Confirm Password</label><br>
+					</div>  
+
+				
+
+					<input type="submit" class="btn btn-primary submit_btn my-4" name="btn" value="Submit">
+                    <button type="submit" class="btn btn-secondary submit_btn my-4 ms-3"><a style="color: #fff;" href="../regLog2/Login.php">Cancel</a></button> 
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
+<?php
+if(isset($_POST['btn']))
+{
+	if($_POST['pwd']==$_POST['pwdc'])
+	{
+		$p=$_POST['pwd'];
+		$cp=$_POST['pwdc'];
+		$nm=$_POST['unm'];
+		$em=$_POST['email'];
+		
+		$sql=mysqli_query($con,"SELECT * FROM `user_data` WHERE username='$nm'");
+		while($row=mysqli_fetch_array($sql))
+		{
+			if($em==$row[8])
+			{
+				$ins=mysqli_query($con,"UPDATE `user_data` SET `password`='$p' WHERE username='$nm'");
+				if($ins)
+				{
+					echo "<script>alert('Password updated !!!')</script>";
+				}
+				else
+					echo "an error occored";
+			}
+			else
+				echo "Incorrect email or username!!!";
+		}
+	}
+	else
+	{
+		echo "Password Does not match...";
+	}
+}
+?>
